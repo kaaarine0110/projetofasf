@@ -11,7 +11,7 @@ function init() {
     
     var mapOptions = {
         // How zoomed in you want the map to start at (always required)
-        zoom: 7,
+        zoom: 15,
 
         // The latitude and longitude to center the map (always required)
         center: myLatlng,
@@ -33,16 +33,24 @@ function init() {
     var addresses = ['Brooklyn'];
 
     for (var x = 0; x < addresses.length; x++) {
-        $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false', null, function (data) {
-            var p = data.results[0].geometry.location
-            var latlng = new google.maps.LatLng(p.lat, p.lng);
-            new google.maps.Marker({
-                position: latlng,
-                map: map,
-                icon: 'images/loc.png'
-            });
+        var geocoder = new google.maps.Geocoder();
+        var address = "luz-mg,brazil";
 
+        geocoder.geocode( { 'address': address}, function(results, status) {
+            console.log(results, status);
+        if (status == google.maps.GeocoderStatus.OK) {
+        new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map,
+           icon: 'images/loc.png'
         });
+        map.setCenter(results[0].geometry.location)
+
+        } 
+    }); 
+         
+
+    
     }
     
 }
